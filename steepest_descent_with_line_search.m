@@ -1,8 +1,9 @@
-function [x, history] = steepest_descent_with_line_search(f, grad_f, x0, tolerance, max_iter, golden_search)
+function [x, history] = steepest_descent_with_line_search(f, grad_f, x0, tolerance, max_iter)
     % Steepest Descent Method with Step Size defined by Golden Search
     % Method in the direction of gradient
     %
     % Inputs:
+    % f             - Function handle for the objective function f
     % grad_f        - Function handle for the gradient of f, given directly
     % to avoid extra computational complexity
     % x0            - Initial point (vector)
@@ -27,11 +28,12 @@ function [x, history] = steepest_descent_with_line_search(f, grad_f, x0, toleran
         end
         
         % Define the line search objective function along the search direction
-        p = -grad; % Descent direction (negative gradient)
-        phi = @(gamma) f(x + gamma * p); % Line search objective
+        d = -grad; % Descent direction (negative gradient)
+        phi = @(gamma) f(x + gamma * d); % Line search objective
         
         % Perform line search using golden section method
-        gamma = golden_search(phi, 0, 1, 1e-4); % Adjust search bounds as needed
+        [a_vals, b_vals,~] = golden_section(phi, 0, 1, 1e-4); % Search the minimum gamma in the -grad direction
+        gamma = (a_vals(end) + b_vals(end))/2; % Take the middle point of the interval boundaries returned, as an approx of the min
         
         % Update x
         x = x + gamma * p;
