@@ -1,11 +1,11 @@
-function [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolerance, mode, step)
-    % Newton method with different modes for step size selection
+function [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, tolerance, mode, step)
+    % Levenberg-Marquardt method with different modes for step size selection
     %
     % Inputs:
     %   f                   - Function handle of the objective function.
     %   grad_f              - Function handle for the gradient of f, given for
     %   simplicity
-    %   hess_f              - Function handle for the inverse hessian of f, again given for
+    %   hess_f              - Function handle for the hessian of f, again given for
     %   simplicity
     %   x0                  - Initial point (vector).
     %   max_iter            - Maximum number of iterations allowed
@@ -32,14 +32,18 @@ function [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolera
             break;
         end
         
-        % Compute the hessian at the point we are currently oon
+        % Compute the hessian of f at the current point
         hess=hess_f(xmin);
 
-        % Compute the hessian's inverse at the point we are currently on
-        inv_hess=inv(hess);
-
-        % Determine descent direction (negative hessian inverse dotted * grad)
-        d = -inv_hess*grad;
+        % Compute the μk so hessian(f)+μk*I is positive definite
+        % Find the largest by absolute value eigval of hessian
+        m = max(abs(eig(hess))); % This is m_bar, anything bigger than that will do
+        
+        % Find the new Δk
+        Dk=inv(hess+m+1); % We add 1 arbitrarily, anything positive will do
+        
+        % Determine descent direction
+        d = -Dk*grad;
         
         % Find out the step selection mode
         switch mode

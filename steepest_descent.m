@@ -1,4 +1,4 @@
-function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, mode)
+function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, mode, step)
     % Steepest descent method with different modes for step size selection
     %
     % Inputs:
@@ -10,6 +10,7 @@ function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, 
     %   tolerance  - Tolerance for stopping criteria (norm of gradient).
     %   mode       - 'fixed', 'linesearch' or 'armijo' depending on the
     %   way we select the step size
+    %   step       - The size of step in 'fixed' mode
 
     % Outputs:
     %   x          - Approximate solution.
@@ -35,7 +36,7 @@ function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, 
         % Find out the step selection mode
         switch mode
             case 'fixed'
-                gamma = 0.1;
+                gamma = step;
             case 'linesearch'
                 phi = @(gamma) f(xmin + gamma * d); % Line search objective function
                 % Perform line search using golden section method
