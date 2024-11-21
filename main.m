@@ -23,20 +23,24 @@ hess_f=matlabFunction(hess_sym,'Vars',{[x;y]});
 % Define tolerance parameter
 tolerance=1e-3;
 % Define a limit for maximum number of iterations
-max_iter=100;
+max_iter=500;
+% Define the fixed step size we will use
+fixed_step=0.1;
 
 %% Task 1: Graph the function to get an intuition of it
 grapher(f,5,5,100, 'surf'); % Surface Graph for x,y from -5 to 5 with 100 points in between
 grapher(f,4,4,100, 'contour');
+
 
 %% Tasks 2-4: Find the minimum of f using different methods for search
 % We will run three different methods for 3 starting points
 % We will examine what happens if we choose the step with different methods
 starting_points=[0, 0; -1, 1; 1, -1];
 step_modes=["fixed", "linesearch", "armijo"];
-
+graph_type='contour';
 % The code for each task is the same except for the titles and the function
 % calls
+
 %% Task 2: Steepest Descent method
 for j = 1:3 % For every different mode of step selection
     for i = 1:size(starting_points, 1) % And every different starting point
@@ -44,12 +48,12 @@ for j = 1:3 % For every different mode of step selection
         y=starting_points(i, 2);
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
-        [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, step_modes(j), 0.1);
-        grapher(f,3,3,200,'mesh');
+        [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
-        title('Trajectory of optimization point to convergence during Gradient Descent');
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)));
+        title('Trajectory of optimization point to convergence during Steepest Descent');
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations/steps until termination: ' + size(history,1));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
@@ -59,10 +63,10 @@ for j = 1:3 % For every different mode of step selection
         history_z = history_z';
     
         % Plot the descent trajectory
-        plot3(history_x, history_y, history_z, '-x', 'LineWidth',2,'MarkerSize',6,'Color','r', 'DisplayName','Trajectory of optimization');
+        plot3(history_x, history_y, history_z, '-x', 'LineWidth',1,'MarkerSize',8,'Color','r', 'DisplayName','Trajectory of optimization');
     
         % Mark especially the final point of convergence
-        plot3(history_x(end),history_y(end),history_z(end), '-o', 'MarkerSize',10, 'Color','b','MarkerFaceColor','auto','DisplayName','Point of convergence');
+        plot3(history_x(end),history_y(end),history_z(end), 'Marker', 'diamond', 'MarkerSize', 10, 'LineWidth', 2, 'Color','b','DisplayName','Point of convergence');
     end
 end
 
@@ -73,12 +77,12 @@ for j = 1:3 % For every different mode of step selection
         y=starting_points(i, 2);
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
-        [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), 0.1);
-        grapher(f,3,3,200,'mesh');
+        [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
         title("Trajectory of optimization point to convergence during Newton's method");
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)));
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations/steps until termination: ' + size(history,1));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
@@ -88,10 +92,10 @@ for j = 1:3 % For every different mode of step selection
         history_z = history_z';
     
         % Plot the descent trajectory
-        plot3(history_x, history_y, history_z, '-x', 'LineWidth',2,'MarkerSize',6,'Color','r', 'DisplayName','Trajectory of optimization');
+        plot3(history_x, history_y, history_z, '-x', 'LineWidth',1,'MarkerSize',8,'Color','r', 'DisplayName','Trajectory of optimization');
     
         % Mark especially the final point of convergence
-        plot3(history_x(end),history_y(end),history_z(end), '-o', 'MarkerSize',10, 'Color','b','MarkerFaceColor','auto','DisplayName','Point of convergence');
+        plot3(history_x(end),history_y(end),history_z(end), 'Marker', 'diamond', 'MarkerSize', 10, 'LineWidth', 2, 'Color','b','DisplayName','Point of convergence');
     end
 end
 
@@ -102,12 +106,12 @@ for j = 1:3 % For every different mode of step selection
         y=starting_points(i, 2);
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
-        [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), 0.1);
-        grapher(f,3,3,200,'mesh');
+        [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
         title('Trajectory of optimization point to convergence during Levenberg-Marquardt method');
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)));
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations/steps until termination: ' + size(history,1));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
@@ -117,9 +121,9 @@ for j = 1:3 % For every different mode of step selection
         history_z = history_z';
     
         % Plot the descent trajectory
-        plot3(history_x, history_y, history_z, '-x', 'LineWidth',2,'MarkerSize',6,'Color','r', 'DisplayName','Trajectory of optimization');
+        plot3(history_x, history_y, history_z, '-x', 'LineWidth',1,'MarkerSize',8,'Color','r', 'DisplayName','Trajectory of optimization');
     
         % Mark especially the final point of convergence
-        plot3(history_x(end),history_y(end),history_z(end), '-o', 'MarkerSize',10, 'Color','b','MarkerFaceColor','auto','DisplayName','Point of convergence');
+        plot3(history_x(end),history_y(end),history_z(end), 'Marker', 'diamond', 'MarkerSize', 10, 'LineWidth', 2, 'Color','b','DisplayName','Point of convergence');
     end
 end
