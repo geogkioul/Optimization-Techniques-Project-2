@@ -34,13 +34,13 @@ function [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, to
         
         % Compute the hessian of f at the current point
         hess=hess_f(xmin);
+        % We want to make the matrix positive definite so we need to make
+        % all eigenvalues positive. For that reason we will find the
+        % minimum eigenvalue and add max(0, -eig_min+e) where e: constant>0 
 
-        % Compute the μk so hessian(f)+μk*I is positive definite
-        % Find the largest by absolute value eigval of hessian
-        m = max(abs(eig(hess))); % This is m_bar, anything bigger than that will do
-        
+        m = max(0, 0.1 - min(eig(hess)));
         % Find the new Δk
-        Dk=inv(hess+m+1); % We add 1 arbitrarily, anything positive will do
+        Dk=inv(hess + eye(2)*m); % We add mI to the hessian to make it positive definite
         
         % Determine descent direction
         d = -Dk*grad;
@@ -52,7 +52,7 @@ function [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, to
             case 'linesearch'
                 phi = @(gamma) f(xmin + gamma * d); % Line search objective function
                 % Perform line search using golden section method
-                [a_vals, b_vals,~] = golden_section(phi, 0, 1, 1e-4); % Search the minimum gamma in the -grad direction
+                [a_vals, b_vals,~] = golden_section(phi, 0, 5, 1e-4); % Search the minimum gamma in the -grad direction
                 gamma = (a_vals(end) + b_vals(end))/2; % Take the middle point of the interval boundaries returned, as an approx of the min
             case 'armijo'
                 % Armijo parameters
@@ -60,7 +60,7 @@ function [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, to
                 alpha = 1e-4;   % Sufficient decrease parameter (0 < sigma < 1)
                 gamma = 1;      % Initialize step size
                 % Armijo condition: f(x + gamma * p) <= f(x) + gamma * alpha * g' * p
-                while f(xmin + gamma * d) > f(xmin) + gamma * alpha * (grad' * d)
+                while f(xmin + gamma * d) > f(xmin) + gamma * alpha * (d' * grad)
                     gamma = beta * gamma; % Reduce step
                 end
             otherwise

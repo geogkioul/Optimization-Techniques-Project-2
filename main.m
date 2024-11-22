@@ -24,8 +24,8 @@ hess_f=matlabFunction(hess_sym,'Vars',{[x;y]});
 tolerance=1e-3;
 % Define a limit for maximum number of iterations
 max_iter=500;
-% Define the fixed step size we will use
-fixed_step=0.1;
+% Define the fixed step size we will use 
+fixed_step=0.05;
 
 %% Task 1: Graph the function to get an intuition of it
 grapher(f,5,5,100, 'surf'); % Surface Graph for x,y from -5 to 5 with 100 points in between

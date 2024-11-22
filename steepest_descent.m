@@ -40,7 +40,7 @@ function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, 
             case 'linesearch'
                 phi = @(gamma) f(xmin + gamma * d); % Line search objective function
                 % Perform line search using golden section method
-                [a_vals, b_vals,~] = golden_section(phi, 0, 1, 1e-4); % Search the minimum gamma in the -grad direction
+                [a_vals, b_vals,~] = golden_section(phi, 0, 5, 1e-4); % Search the minimum gamma in the -grad direction
                 gamma = (a_vals(end) + b_vals(end))/2; % Take the middle point of the interval boundaries returned, as an approx of the min
             case 'armijo'
                 % Armijo parameters
@@ -48,7 +48,7 @@ function [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, 
                 alpha = 1e-4;   % Sufficient decrease parameter (0 < sigma < 1)
                 gamma = 1;      % Initialize step size
                 % Armijo condition: f(x + gamma * p) <= f(x) + gamma * alpha * g' * p
-                while f(xmin + gamma * d) > f(xmin) + gamma * alpha * (grad' * d)
+                while f(xmin + gamma * d) > f(xmin) + gamma * alpha * (d' * grad)
                     gamma = beta * gamma; % Reduce step
                 end
             otherwise
