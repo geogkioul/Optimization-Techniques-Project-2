@@ -53,7 +53,7 @@ for j = 1:3 % For every different mode of step selection
         hold on;
         legend show;
         title('Trajectory of optimization point to convergence during Steepest Descent');
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Value of f at point of convergence: ' + f(xmin));
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Point of convergence: ('+ xmin(1) + ', ' + xmin(2) + ')' + newline + 'Value of f at point of convergence: ' + f(xmin));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
@@ -82,7 +82,7 @@ for j = 1:3 % For every different mode of step selection
         hold on;
         legend show;
         title("Trajectory of optimization point to convergence during Newton's method");
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Value of f at point of convergence: ' + f(xmin));
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Point of convergence: ('+ xmin(1) + ', ' + xmin(2) + ')' + newline + 'Value of f at point of convergence: ' + f(xmin));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
@@ -111,7 +111,7 @@ for j = 1:3 % For every different mode of step selection
         hold on;
         legend show;
         title('Trajectory of optimization point to convergence during Levenberg-Marquardt method');
-        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Value of f at point of convergence: ' + f(xmin));
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Number of iterations until termination: ' + size(history,1) + newline + 'Point of convergence: ('+ xmin(1) + ', ' + xmin(2) + ')' + newline + 'Value of f at point of convergence: ' + f(xmin));
         % Extract the coordinates of the points during descent
         history_x = history(:, 1);
         history_y = history(:, 2);
