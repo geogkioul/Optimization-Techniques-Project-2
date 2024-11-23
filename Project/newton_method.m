@@ -26,7 +26,6 @@ function [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolera
     for iter = 1:max_iter
         grad = grad_f(xmin);        % Compute the gradient
         grad_norm = norm(grad);     % Norm of the gradient
-        
         % Check stopping criteria
         if grad_norm < tolerance
             break;
@@ -62,7 +61,6 @@ function [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolera
             otherwise
                 error('Invalid mode. Choose ''fixed'', ''linesearch'', or ''armijo''.');
         end
-        
         % Update the solution
         xmin = xmin + gamma * d;
         
