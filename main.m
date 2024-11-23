@@ -21,7 +21,7 @@ grad_f=matlabFunction(grad_sym,'Vars',{[x;y]});
 hess_f=matlabFunction(hess_sym,'Vars',{[x;y]});
 
 % Define tolerance parameter
-tolerance=1e-3;
+tolerance=1e-4;
 % Define a limit for maximum number of iterations
 max_iter=10000;
 % Define the fixed step size we will use 
