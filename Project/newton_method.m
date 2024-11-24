@@ -47,7 +47,7 @@ function [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolera
             case 'linesearch'
                 phi = @(gamma) f(xmin + gamma * d); % Line search objective function
                 % Perform line search using golden section method
-                [a_vals, b_vals,~] = golden_section(phi, 0, 10, 1e-4); % Search the minimum gamma in the -grad direction
+                [a_vals, b_vals,~] = golden_section(phi, 0, 5, 1e-4); % Search the minimum gamma in the -grad direction
                 gamma = (a_vals(end) + b_vals(end))/2; % Take the middle point of the interval boundaries returned, as an approx of the min
             case 'armijo'
                 % Armijo parameters
