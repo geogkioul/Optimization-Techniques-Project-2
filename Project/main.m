@@ -49,6 +49,24 @@ for j = 1:3 % For every different mode of step selection
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
         [xmin, history] = steepest_descent(f, grad_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        % First plot the values of f at each iteration
+        % Compute the evaluation of f at each iteration
+        f_evals = arrayfun(@(i) f(history(i, :)'), 1:size(history, 1));
+        % Make the plot
+        figure;
+        hold on;
+        plot(1:length(f_evals), f_evals,'-x', 'LineWidth', 1,'MarkerSize',5,'Color','r', 'DisplayName','Function values at each iteration');
+        % Mark especially the final point of convergence
+        plot(length(f_evals), f_evals(end), 'Marker', 'diamond', 'LineWidth', 1.5, 'MarkerSize', 8, 'Color', 'b',  'DisplayName', 'Function value at point of convergence');        
+        xlim([0, length(f_evals)+1]); % Plot from 0 to #iterations with a margin of 1
+        xlabel('Iteration');
+        ylabel('Function Value');
+        title('Function Values at Each Iteration - Steepest Descent');
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Starting point: (' + x0(1) + ', ' + x0(2) + ')');
+        legend show;
+        grid on;
+
+        % Now do the contour plots
         grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
@@ -78,6 +96,24 @@ for j = 1:3 % For every different mode of step selection
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
         [xmin, history] = newton_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        % First plot the values of f at each iteration
+        % Compute the evaluation of f at each iteration
+        f_evals = arrayfun(@(i) f(history(i, :)'), 1:size(history, 1));
+        % Make the plot
+        figure;
+        hold on;
+        plot(1:length(f_evals), f_evals,'-x', 'LineWidth', 1,'MarkerSize',5,'Color','r', 'DisplayName','Function values at each iteration');
+        % Mark especially the final point of convergence
+        plot(length(f_evals), f_evals(end), 'Marker', 'diamond', 'LineWidth', 1.5, 'MarkerSize', 8, 'Color', 'b',  'DisplayName', 'Function value at point of convergence');        
+        xlim([0, length(f_evals)+1]); % Plot from 0 to #iterations with a margin of 1
+        xlabel('Iteration');
+        ylabel('Function Value');
+        title('Function Values at Each Iteration - Newton Method');
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Starting point: (' + x0(1) + ', ' + x0(2) + ')');
+        legend show;
+        grid on;
+
+        % Now do the contour plots
         grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
@@ -107,6 +143,24 @@ for j = 1:3 % For every different mode of step selection
         x0=[x;y]; % Make the starting point a column vector as needed for the function
     
         [xmin, history] = leven_marq_method(f, grad_f, hess_f, x0, max_iter, tolerance, step_modes(j), fixed_step);
+        % First plot the values of f at each iteration
+        % Compute the evaluation of f at each iteration
+        f_evals = arrayfun(@(i) f(history(i, :)'), 1:size(history, 1));
+        % Make the plot
+        figure;
+        hold on;
+        plot(1:length(f_evals), f_evals,'-x', 'LineWidth', 1,'MarkerSize',5,'Color','r', 'DisplayName','Function values at each iteration');
+        % Mark especially the final point of convergence
+        plot(length(f_evals), f_evals(end), 'Marker', 'diamond', 'LineWidth', 1.5, 'MarkerSize', 8, 'Color', 'b',  'DisplayName', 'Function value at point of convergence');        
+        xlim([0, length(f_evals)+1]); % Plot from 0 to #iterations with a margin of 1
+        xlabel('Iteration');
+        ylabel('Function Value');
+        title('Function Values at Each Iteration - Levenberg-Marquardt Method');
+        subtitle('Step size selection mode: ' + sprintf(step_modes(j)) + newline + 'Starting point: (' + x0(1) + ', ' + x0(2) + ')');
+        legend show;
+        grid on;
+
+        % Now do the contour plots
         grapher(f,3,3,200,graph_type);
         hold on;
         legend show;
